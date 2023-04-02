@@ -1,10 +1,16 @@
 
-<?php 
+<?php
+include "conexion.php"; 
 session_start();
 
 if(!isset($_SESSION['Nombre_Usuario'])){
     header("Location: login.php");
 }
+
+$id = $_SESSION['ID_Usuario'];
+
+$sql ="SELECT Foto_Usuario from usuario where ID_Usuario=$id";
+$mostrarfoto=mysqli_query($conn,$sql);
 
 ?>
 
@@ -107,7 +113,25 @@ if(!isset($_SESSION['Nombre_Usuario'])){
 
 <div class="sub-menu">
   <div class="user-info">
-    <img src="img/ProfilePicture.png">
+    
+  
+  <?php 
+while($foto=mysqli_fetch_assoc($mostrarfoto)){
+?>
+
+
+
+<img  src= "data:image/jpeg;base64, <?php echo base64_encode($foto['Foto_Usuario']); ?> "/>
+
+
+   
+<?php
+}
+?>
+
+
+
+
     <p><?php echo $_SESSION['Rol_Usuario']; ?></p>
     <br>
     <h3><h3><?php echo $_SESSION['Nombre_Usuario']; ?></h3></h3>
