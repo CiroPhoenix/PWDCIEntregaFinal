@@ -32,7 +32,21 @@ if(isset($_POST["submit"])){
         $_SESSION['Correo_Usuario'] = $row['Correo_Usuario'];
         $_SESSION['Contrasena_Usuario'] = $row['Contrasena_Usuario'];
     
-        header("Location: index.php");
+        switch($_SESSION['Rol_Usuario']){
+            case 'Estudiante':
+                header('location: index.php');
+            break;
+
+            case 'Maestro':
+                header('location: indexMaestro.php');
+            break;
+            
+            case 'Administrador':
+                header('location: indexAdministrador.php');
+            break;
+            default:
+            break;
+        }
     }else{
         echo "<script>alert('La contraseña o el email son incorrectos')</script>";
        
