@@ -9,7 +9,9 @@ if(!isset($_SESSION['Nombre_Usuario'])){
 
 $id = $_SESSION['ID_Usuario'];
 
-$sql ="SELECT * from usuario where Rol_Usuario = 'Estudiante'";
+$ID = $_REQUEST['ID_Usuario'];
+
+$sql ="SELECT * from usuario where ID_Usuario = '$ID'";
 $result=mysqli_query($conn,$sql);
 
 $sql ="SELECT Foto_Usuario from usuario where ID_Usuario=$id";
@@ -237,38 +239,50 @@ border-style: solid; color:white;" >
  
 
 
-
-<h1>Lista de Usuarios</h1>
+ <h1>Informacion de Usuario</h1>
 
 
   
 <?php 
-while($filas=mysqli_fetch_assoc($result)){
+
+$filas = $result->fetch_assoc();
 ?>
 
-<table class="content-table">
-   
-    <tbody>
-        <tr>
-        <td><?php echo $filas['ID_Usuario']?></td>  
-        <td><img height="100px" width="100px" src= "data:image/jpeg;base64, <?php echo base64_encode($filas['Foto_Usuario']); ?> "/></td>
 
-        <td><?php echo $filas['Nombre_usuario_Usuario']?></td>  
-  
 
-<td><a href="indexAdministrador_Detalles.php?ID_Usuario=<?php echo $filas['ID_Usuario']?>">Ver Perfil</a></td>
-        </tr>
-      
-        </tr>
-    
-       
-    </tbody>
-</table>
 
+<div class="Info_Contenedor">
+
+
+
+<img height="200px" width="200px" src= "data:image/jpeg;base64, <?php echo base64_encode($filas['Foto_Usuario']); ?> "/>
+
+
+<h1>Nombre: <?php echo $filas['Nombre_Usuario']?> </h1>
+<br>
+<h1>Apellido Paterno: <?php echo $filas['NomPatr_Usuario']?></h1>
+<br>
+<h1>Apellido Materno: <?php echo $filas['NomMatr_Usuario']?>  </h1>
+<br>
+<h1>Rol: <?php echo $filas['Rol_Usuario']?>  </h1>
+<br>
+<h1>Genero: <?php echo $filas['Genero_Usuario']?>  </h1>
+<br>
+<h1>Fecha de Nacimiento:<?php echo $filas['Nacimiento_Usuario']?> </h1>
+<br>
+<h1>Username: <?php echo $filas['Nombre_usuario_Usuario']?> </h1>
+<br>
+<h1>Email: <?php echo $filas['Correo_Usuario']?> </h1>
+ 
+
+
+
+
+</div>
 
    
 <?php
-}
+
 ?>
  
   
