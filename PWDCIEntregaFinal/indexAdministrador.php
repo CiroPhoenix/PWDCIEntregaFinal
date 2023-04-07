@@ -9,6 +9,9 @@ if(!isset($_SESSION['Nombre_Usuario'])){
 
 $id = $_SESSION['ID_Usuario'];
 
+
+
+
 $sql ="SELECT * from usuario where Rol_Usuario = 'Estudiante'";
 $result=mysqli_query($conn,$sql);
 
@@ -170,9 +173,12 @@ while($foto=mysqli_fetch_assoc($mostrarfoto)){
 
 
 <div class="input-group">
-<input type="text"  placeholder="¿Que te gustaria aprender?" class="form-control" id="inp">
+<form action="" method="get">
+<input type="text"  placeholder="Buscar Usuario" class="form-control" name="busqueda" id="inp">
 <div class="input-group-append">
-<button type="button" class="btn btn-dark" id="search" >Buscar</button>
+<button type="submit" class="btn btn-dark" name="search" id="search" >Buscar</button>
+</form>
+
 </div>
 </div>
 </div>
@@ -238,43 +244,52 @@ border-style: solid; color:white;" >
 
 
 
-<h1>Lista de Usuarios</h1>
+<h1>Lista de Usuarios </h1>
 
 
   
-<?php 
-while($filas=mysqli_fetch_assoc($result)){
-?>
+
+  
+
+
+
+
+
+ <?php 
+
+
+if(isset($_GET['search'])){
+  $busqueda = $_GET['busqueda'];
+    $query ="SELECT * from usuario where Nombre_usuario_Usuario LIKE '%$busqueda%'";
+    $resultado=$conn->query($query);
+    while($filas = $resultado->fetch_assoc()){
+
+    ?>
 
 <table class="content-table">
    
-    <tbody>
-        <tr>
-        <td><?php echo $filas['ID_Usuario']?></td>  
-        <td><img height="100px" width="100px" src= "data:image/jpeg;base64, <?php echo base64_encode($filas['Foto_Usuario']); ?> "/></td>
+   <tbody>
+       <tr>
+       <td><?php echo $filas['ID_Usuario']?></td>  
+       <td><img height="100px" width="100px" src= "data:image/jpeg;base64, <?php echo base64_encode($filas['Foto_Usuario']); ?> "/></td>
 
-        <td><?php echo $filas['Nombre_usuario_Usuario']?></td>  
-  
+       <td><?php echo $filas['Nombre_usuario_Usuario']?></td>  
+ 
 
 <td><a href="indexAdministrador_Detalles.php?ID_Usuario=<?php echo $filas['ID_Usuario']?>">Ver Perfil</a></td>
-        </tr>
-      
-        </tr>
-    
-       
-    </tbody>
-</table>
-
-
+       </tr>
+     
+       </tr>
    
-<?php
+      
+   </tbody>
+</table>
+    <?php
+
+    }
+    
 }
-?>
- 
-  
-
-
-
+    ?>
   
   
 
