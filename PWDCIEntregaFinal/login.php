@@ -42,7 +42,7 @@ if(isset($_POST["submit"])){
             break;
             
             case 'Administrador':
-                header('location: indexAdministrador.php');
+                header('location: indexAdministrador.php?busqueda=&search=');
             break;
             default:
             break;

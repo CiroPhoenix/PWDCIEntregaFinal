@@ -132,7 +132,7 @@ while($foto=mysqli_fetch_assoc($mostrarfoto)){
 </div>
         <div class="container-fluid">
    
-        <a class="navbar-brand" href="indexAdministrador.php">
+        <a class="navbar-brand" href="indexAdministrador.php?busqueda=&search=">
             <img src="img/SaturnoLogo.png" alt="logo" width="150px">
           </a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -143,13 +143,13 @@ while($foto=mysqli_fetch_assoc($mostrarfoto)){
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ">
            <li class="navbar-nav">
-           <a class="navbar-brand" href="indexAdministrador.php">
+           <a class="navbar-brand" href="indexAdministrador.php?busqueda=&search=">
             <img src="img/SaturnoLogo.png" alt="logo" width="150px">
           </a>
 
            </li>
               <li  class="nav-item" >
-                <a class="nav-link active" aria-current="page" href="indexAdministrador.php">Home</a>
+                <a class="nav-link active" aria-current="page" href="indexAdministrador.php?busqueda=&search=">Home</a>
               </li class="nav-item">
               <li>
                 <a class="nav-link" href="#">Link</a>
@@ -274,6 +274,7 @@ $filas = $result->fetch_assoc();
 <br>
 <h1>Email: <?php echo $filas['Correo_Usuario']?> </h1>
  
+<a href="indexAdministradorEliminarUsuario.php?ID_Usuario=<?php echo $filas['ID_Usuario']?>">Eliminar Usuario</a>
 
 
 
