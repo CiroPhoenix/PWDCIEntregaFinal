@@ -11,9 +11,49 @@ $id = $_SESSION['ID_Usuario'];
 
 
 
+$query ="SELECT * from usuario";
+    $resultado=$conn->query($query);
 
-$sql ="SELECT * from usuario where Rol_Usuario = 'Estudiante'";
-$result=mysqli_query($conn,$sql);
+
+
+    if(isset($_POST['filtro'])){
+      switch($_POST['filtro']){
+          case "todos":
+              $sql ="SELECT * from usuario";
+              $resultado=mysqli_query($conn,$sql);
+              break;
+          case "recientes":
+              $sql ="SELECT * from usuario ORDER BY Nombre_usuario_Usuario asc";
+              $resultado=mysqli_query($conn,$sql);
+              break;
+          case "antiguos":
+              $sql ="SELECT * from usuario ORDER BY Nombre_usuario_Usuario desc";
+              $resultado=mysqli_query($conn,$sql);
+              break;
+              case "estudiantes":
+                $sql ="SELECT * from usuario where `Rol_Usuario` = 'Estudiante'";
+                $resultado=mysqli_query($conn,$sql);
+                break;
+                case "maestros":
+                  $sql ="SELECT * from usuario where `Rol_Usuario` = 'Maestro'";
+                  $resultado=mysqli_query($conn,$sql);
+                  break;
+                  case "administradores":
+                    $sql ="SELECT * from usuario where `Rol_Usuario` = 'Administrador'";
+                    $resultado=mysqli_query($conn,$sql);
+                    break;
+  
+
+             
+        
+      }
+  }else{
+      $sql ="SELECT * from usuario";
+      $resultado=mysqli_query($conn,$sql);
+  }
+
+
+
 
 $sql ="SELECT Foto_Usuario from usuario where ID_Usuario=$id";
 $mostrarfoto=mysqli_query($conn,$sql);
@@ -34,6 +74,7 @@ $mostrarfoto=mysqli_query($conn,$sql);
     <title>Academia Saturno - Inicio</title>
     <link rel="stylesheet" href="css/estilos.css" />
    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.slim.min.js"></script>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
    <link rel="stylesheet" 
    href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
    <script src="jquery.js"></script>
@@ -133,7 +174,7 @@ while($foto=mysqli_fetch_assoc($mostrarfoto)){
 </div>
         <div class="container-fluid">
    
-        <a class="navbar-brand" href="indexAdministrador.php?busqueda=&search=">
+        <a class="navbar-brand" href="indexAdministrador.php">
             <img src="img/SaturnoLogo.png" alt="logo" width="150px">
           </a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -144,13 +185,13 @@ while($foto=mysqli_fetch_assoc($mostrarfoto)){
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ">
            <li class="navbar-nav">
-           <a class="navbar-brand" href="indexAdministrador.php?busqueda=&search=">
+           <a class="navbar-brand" href="indexAdministrador.php">
             <img src="img/SaturnoLogo.png" alt="logo" width="150px">
           </a>
 
            </li>
               <li  class="nav-item" >
-                <a class="nav-link active" aria-current="page" href="indexAdministrador.php?busqueda=&search=">Home</a>
+                <a class="nav-link active" aria-current="page" href="indexAdministrador.php">Home</a>
               </li class="nav-item">
               <li>
                 <a class="nav-link" href="#">Link</a>
@@ -173,11 +214,13 @@ while($foto=mysqli_fetch_assoc($mostrarfoto)){
 
 
 <div class="input-group">
+  
 <form action="" method="get">
 <input type="text"  placeholder="Buscar Usuario" class="form-control" name="busqueda" id="inp">
 <div class="input-group-append">
 <button type="submit" class="btn btn-dark" name="search" id="search" >Buscar</button>
 </form>
+
 
 </div>
 </div>
@@ -247,21 +290,49 @@ border-style: solid; color:white;" >
 <h1>Lista de Usuarios </h1>
 
 
+
+
   
+<div class="jumbotron">
+		<div class="input-group mb-3">
+		  <input type="text" class="form-control" id="txtbusca" placeholder="Buscar Usuarios" aria-label="Buscar" aria-describedby="basic-addon2">
+		  <div class="input-group-append">
+		   
+		  </div>
+      
+		</div>
 
-  
 
 
 
 
 
- <?php 
 
 
-if(isset($_GET['search'])){
-  $busqueda = $_GET['busqueda'];
-    $query ="SELECT * from usuario where Nombre_usuario_Usuario LIKE '%$busqueda%'";
-    $resultado=$conn->query($query);
+
+
+    
+    <div class="salida">Resultados</div>
+		</div>
+    <div id="filtros">
+Selecciona los filtros deseados para encontrar los productos <form action="indexAdministrador.php" method="post">
+    <select name="filtro">
+        <option value="todos">Todos</option>
+        <option value="recientes">Mas Recientes</option>
+        <option value="antiguos">Mas Antiguos</option>
+        <option value="estudiantes">Estudiantes</option>
+        <option value="maestros">Maestros</option>
+        <option value="administradores">Administradores</option>
+      
+    </select> 
+    <button type="submit">Filtrar</button></form>
+</div>
+    <?php 
+
+
+
+ 
+    
     while($filas = $resultado->fetch_assoc()){
 
     ?>
@@ -274,6 +345,7 @@ if(isset($_GET['search'])){
        <td><img height="100px" width="100px" src= "data:image/jpeg;base64, <?php echo base64_encode($filas['Foto_Usuario']); ?> "/></td>
 
        <td><?php echo $filas['Nombre_usuario_Usuario']?></td>  
+       <td><?php echo $filas['Rol_Usuario']?></td>  
  
 
 <td><a href="indexAdministrador_Detalles.php?ID_Usuario=<?php echo $filas['ID_Usuario']?>">Ver Perfil</a></td>
@@ -288,8 +360,35 @@ if(isset($_GET['search'])){
 
     }
     
-}
+
     ?>
+	</div>
+
+	<script>
+		$(document).ready(function(){
+			$("#txtbusca").keyup(function(){
+				var parametros="txtbusca="+$(this).val()
+				$.ajax({
+	                data:  parametros,
+	                url:   'buscador.php',
+	                type:  'post',
+	                beforeSend: function () { },
+	                success:  function (response) {                	
+	                    $(".salida").html(response);
+	                },
+	                error:function(){
+	                	alert("error")
+	                }
+            	});
+			})
+		})
+	</script>
+
+
+
+
+
+ 
   
   
 
